@@ -15,22 +15,23 @@ if [ -z "${OPENAI_API_KEY:-}" ]; then
 fi
 
 MODEL="${HERMES_MODEL:-bang-jago2}"
+PROVIDER="${HERMES_PROVIDER:-9router-combo}"
 mkdir -p "$(dirname "$CFG")"
 
 cat > "$CFG" <<EOF
 model:
   default: "${MODEL}"
-  provider: 9router-combo
+  provider: "${PROVIDER}"
   api_mode: chat_completions
   base_url: "${OPENAI_BASE_URL}"
   key_env: OPENAI_API_KEY
 providers:
-  9router-combo:
-    name: 9router
+  ${PROVIDER}:
+    name: ${PROVIDER}
     base_url: "${OPENAI_BASE_URL}"
     model: "${MODEL}"
     key_env: OPENAI_API_KEY
 EOF
 
-echo "[start.sh] wrote ${CFG} (provider=9router-combo, model=${MODEL})"
+echo "[start.sh] wrote ${CFG} (provider=${PROVIDER}, model=${MODEL})"
 exec hermes gateway run
