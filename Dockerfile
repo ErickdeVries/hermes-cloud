@@ -1,2 +1,4 @@
 FROM nousresearch/hermes-agent:latest
-CMD ["gateway", "run"]
+COPY start.sh /opt/hermes/start.sh
+RUN chmod +x /opt/hermes/start.sh
+CMD ["/opt/hermes/start.sh"]

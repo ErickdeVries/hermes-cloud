@@ -31,4 +31,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/erickdevries/hermes-cloud:latest
+          tags: |
+            ghcr.io/erickdevries/hermes-cloud:latest
+            ghcr.io/erickdevries/hermes-cloud:sha-${{ github.sha }}
