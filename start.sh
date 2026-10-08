@@ -25,6 +25,16 @@ FALLBACK_URL="${HERMES_FALLBACK_URL:-}"
 FALLBACK_MODEL="${HERMES_FALLBACK_MODEL:-}"
 FALLBACK_KEY_ENV="${HERMES_FALLBACK_KEY_ENV:-OPENAI_API_KEY}"
 
+# API server (for Open WebUI/orchestrator access). Hermes listens on this port.
+# Helipod's Magic Domain / internal service routes best when the app listens
+# on port 80 (the default exposed target). Use $API_SERVER_PORT if set by
+# Helipod Variables, default 8642 (Hermes' built-in default), but switch the
+# DEFAULT to 80 so a fresh service with an empty Exposed Port just works.
+API_PORT="${API_SERVER_PORT:-80}"
+API_ENABLED="${API_SERVER_ENABLED:-false}"
+API_HOST="${API_SERVER_HOST:-0.0.0.0}"
+API_KEY="${API_SERVER_KEY:-}"
+
 cat > "$CFG" <<EOF
 model:
   default: "${MODEL}"
@@ -39,6 +49,19 @@ providers:
     model: "${MODEL}"
     key_env: OPENAI_API_KEY
 EOF
+
+# Append gateway.api_server block when API server is enabled.
+if [ "${API_ENABLED}" = "true" ]; then
+  cat >> "$CFG" <<EOF
+gateway:
+  api_server:
+    enabled: true
+    port: ${API_PORT}
+    host: "${API_HOST}"
+    key: "${API_KEY}"
+EOF
+  echo "[start.sh] api_server enabled -> ${API_HOST}:${API_PORT}"
+fi
 
 # Append fallback_providers only if fallback URL+model are configured.
 if [ -n "${FALLBACK_URL}" ] && [ -n "${FALLBACK_MODEL}" ]; then
