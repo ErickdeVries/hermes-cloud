@@ -1,4 +1,4 @@
-name: build-hermes-cloud
+name: build-hermes-cloud-2
 
 on:
   push:
@@ -32,5 +32,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/erickdevries/hermes-cloud:latest
-            ghcr.io/erickdevries/hermes-cloud:sha-${{ github.sha }}
+            ghcr.io/erickdevries/hermes-cloud-2:latest
+            ghcr.io/erickdevries/hermes-cloud-2:sha-${{ github.sha }}
